@@ -3,7 +3,7 @@ function loadGoogleAnalytics(id) {
   var firstScript= document.getElementsByTagName("script")[0];
   newScript= document.createElement("script");
   newScript.async= "";
-  newScript.src= "https://www.googletagmanager.com/gtag/js?id="+ id;
+  // newScript.src= "https://www.googletagmanager.com/gtag/js?id="+ id;
   firstScript.parentNode.insertBefore(newScript, firstScript);
 
   window.dataLayer = window.dataLayer || [];
