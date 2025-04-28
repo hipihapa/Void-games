@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Void Network Games</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f0f0f0;
+      padding-top: 120px; /* Space for fixed header */
+    }
+
+    .header-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #6c5ce7;
+      color: white;
+      z-index: 1000;
+      padding: 10px 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .centered-header-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      height: 20px;
+      margin-right: 8px;
+    }
+
+    .logo-text {
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .search-container {
+      position: relative;
+      max-width: 300px;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 8px 40px 8px 16px;
+      border-radius: 50px;
+      border: none;
+      font-size: 12px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      cursor: pointer;
+    }
+
+    .category-tabs {
+      display: flex;
+      overflow-x: auto;
+      padding: 0 10px;
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+
+    .category-tabs::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    .tab {
+      white-space: nowrap;
+      padding: 8px 16px;
+      margin: 0 4px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 200;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .tab.active {
+      background-color: white;
+      color: #6c5ce7;
+    }
+
+    .tab:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .tab.active:hover {
+      background-color: white;
+    }
+
+    @media (min-width: 768px) {
+      .search-container {
+        margin-top: 0;
+        margin-left: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-container">
+    <div class="centered-header-content">
+      <div class="header-top">
+        <div class="logo">
+          <img src="/game-controller.png" alt="logo" />
+          <span class="logo-text">voidgames</span>
+        </div>
+        <div class="search-container">
+          <input
+            type="text"
+            class="search-bar"
+            id="headerSearchBar"
+            placeholder="Search games..."
+          />
+          <div class="search-icon">
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
+      <div class="category-tabs">
+        <div class="tab active" data-category="All">All</div>
+        <div class="tab" data-category="New">New</div>
+        <div class="tab" data-category="Puzzle">Puzzle</div>
+        <div class="tab" data-category="Arcade">Arcade</div>
+        <div class="tab" data-category="Board">Board</div>
+        <div class="tab" data-category="Strategy">Strategy</div>
+        <div class="tab" data-category="Action">Action</div>
+        <div class="tab" data-category="Sports">Sports</div>
+        <div class="tab" data-category="Card">Card</div>
+        <div class="tab" data-category="Word">Word</div>
+        <div class="tab" data-category="Racing">Racing</div>
+        <div class="tab" data-category="Simulation">Simulation</div>
+        <div class="tab" data-category="Adventure">Adventure</div>
+        <div class="tab" data-category="Educational">Educational</div>
+        <div class="tab" data-category="Trivia">Trivia</div>
+        <div class="tab" data-category="Music">Music</div>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    console.log("Script loaded!");
+  </script>
+  
+</body>
+</html>

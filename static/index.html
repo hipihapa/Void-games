@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <title>Void Network</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/favicon.png" type="image/png" />
+
+    <!-- Preload UV Service Worker -->
+    <link rel="preload" href="/uv/sw.js" as="script" />
+    <link rel="preload" href="/uv/uv.bundle.js" as="script" />
+    <link rel="preload" href="/uv/uv.config.js" as="script" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link rel="stylesheet" href="/assets/css/index.css" />
+
+    <!-- Scripts -->
+    <script src="/config.js"></script>
+    <script src="/global.js"></script>
+    <script src="uv/uv.bundle.js"></script>
+    <script src="uv/uv.config.js"></script>
+    <script src="/assets/js/favicon-handler.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-814Y2X3KSF"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-814Y2X3KSF");
+    </script>
+
+    <!-- Loading Styles -->
+    <style id="loading-style">
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+    </style>
+
+    <!-- Additional Styles -->
+    <style>
+      /* body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+      } */
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        /* min-height: 100vh; */
+        padding: 1rem;
+        position: relative;
+        z-index: 2;
+      }
+
+      .games-box {
+        width: 80%;
+        /* max-width: 1000px; */
+        /* height: 70vh; */
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        padding: 2px;
+      }
+
+      .scrollable-content {
+        overflow-y: auto;
+        flex-grow: 1;
+        padding: 1.5rem;
+      }
+
+      .games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .games-grid::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .games-grid::-webkit-scrollbar-track {
+        background: rgba(216, 15, 15, 0.05);
+        margin: 4px;
+        border-radius: 4px;
+      }
+
+      .games-grid::-webkit-scrollbar-thumb {
+        background: rgba(232, 16, 16, 0.2);
+        border-radius: 4px;
+      }
+
+      .games-grid::-webkit-scrollbar-thumb:hover {
+        background: rgba(74, 71, 71, 0.3);
+      }
+
+      .game-item {
+        padding: 1rem;
+        background: rgb(255, 255, 255);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(100, 99, 99, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .game-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .game-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .game-title {
+        font-size: 1rem;
+        color: #000000;
+        margin: 0;
+        font-weight: normal;
+        transition: all 0.3s ease;
+      }
+
+      .game-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .game-item:hover .game-title {
+        color: #000000;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      }
+
+      @media (max-width: 768px) {
+        .games-box {
+          width: 95%;
+          height: 80vh;
+        }
+
+        .games-grid {
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+
+        .game-icon {
+          width: 48px;
+          height: 48px;
+        }
+
+        .game-title {
+          font-size: 0.9rem;
+        }
+
+        .site-title {
+          font-size: 2rem;
+        }
+
+        .scrollable-content {
+          padding: 1rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div id="header"></div>
+
+    <div class="container">
+      <div class="games-box">
+        <div class="scrollable-content">
+          <div class="games-grid" id="gamesList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIXED Service Worker Registration -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const stockSW = "/uv/sw.js";
+        // IMPORTANT: Use the allowed scope instead of root scope
+        const swScope = "/uv/";
+        const swAllowedHostnames = ["localhost", "127.0.0.1"];
+
+        // Function to preload and register the service worker with correct scope
+        async function preloadServiceWorker() {
+          // Check if service workers are supported
+          if (!("serviceWorker" in navigator)) {
+            console.error("Service workers are not supported in this browser");
+            return false;
+          }
+
+          // Check if we're on HTTPS or allowed development hostnames
+          if (
+            location.protocol !== "https:" &&
+            !swAllowedHostnames.includes(location.hostname)
+          ) {
+            console.warn(
+              "Service workers require HTTPS (except on localhost/127.0.0.1)"
+            );
+            return false;
+          }
+
+          try {
+            console.log("Registering UV service worker with scope:", swScope);
+
+            // Register the service worker with the CORRECT scope
+            const registration = await navigator.serviceWorker.register(
+              stockSW,
+              {
+                scope: swScope,
+                updateViaCache: "none",
+              }
+            );
+
+            // Wait for the service worker to be ready
+            await navigator.serviceWorker.ready;
+
+            // If we have an active service worker, send it a message to skip waiting
+            if (registration.active) {
+              registration.active.postMessage({ type: "SKIP_WAITING" });
+            }
+
+            console.log(
+              "UV service worker successfully registered with scope:",
+              registration.scope
+            );
+            window.__uv$serviceWorkerRegistered = true;
+            return true;
+          } catch (error) {
+            console.error("UV service worker registration failed:", error);
+            return false;
+          }
+        }
+
+        // Start preloading the service worker immediately
+        preloadServiceWorker();
+      });
+    </script>
+
+    <!-- Games Loading and Header/Footer Inclusion -->
+    <script type="module">
+      try {
+        const gamesList = document.getElementById("gamesList");
+
+        await new Promise((resolve) => {
+          if (window.__uv$config) {
+            resolve();
+          } else {
+            const checkUV = setInterval(() => {
+              if (window.__uv$config) {
+                clearInterval(checkUV);
+                resolve();
+              }
+            }, 100);
+          }
+        });
+
+        const { gamesData } = await import("/assets/json/games.js");
+        const { games2Data } = await import("/assets/json/games2.js");
+
+        const games = [...gamesData, ...games2Data];
+
+        function loadGame(game) {
+          const gameElement = document.createElement("div");
+          gameElement.className = "game-item";
+          gameElement.innerHTML = `<div class="game-icon">
+                    <img src="${game.imgSrc}" alt="${game.title} icon">
+                </div>
+                <h3 class="game-title">${game.title}</h3>
+            `;
+
+          // Update click handler to work with service worker scope limitations
+          gameElement.onclick = async () => {
+            // Show loading overlay
+            const loadingOverlay = document.getElementById("loadingOverlay");
+            if (
+              loadingOverlay &&
+              loadingOverlay.classList.contains("fade-out")
+            ) {
+              loadingOverlay.classList.remove("fade-out");
+              document.getElementById("loadingText").textContent =
+                "Preparing game...";
+              document.getElementById("progressFill").style.width = "0%";
+            }
+
+            try {
+              // Progress animation
+              const progressFill = document.getElementById("progressFill");
+              if (progressFill) {
+                progressFill.style.width = "30%";
+                await new Promise((resolve) => setTimeout(resolve, 100));
+                progressFill.style.width = "60%";
+                await new Promise((resolve) => setTimeout(resolve, 100));
+                progressFill.style.width = "100%";
+                await new Promise((resolve) => setTimeout(resolve, 200));
+              }
+            } catch (error) {
+              console.error("Error in loading animation:", error);
+            } finally {
+              // Navigate to the game
+              window.location.href = `/Classes.html?game=${encodeURIComponent(
+                game.link
+              )}`;
+            }
+          };
+
+          gamesList.appendChild(gameElement);
+        }
+
+        // Create a global search function that can be called from anywhere
+        window.globalSearchGames = function (searchTerm) {
+          gamesList.innerHTML = "";
+          const term = searchTerm.toLowerCase();
+          for (const game of games) {
+            if (game.title.toLowerCase().includes(term)) {
+              loadGame(game);
+            }
+          }
+        };
+
+        // Initial load of all games
+        games.forEach((game) => {
+          loadGame(game);
+        });
+
+        document.addEventListener("headerLoaded", function () {
+
+          // Also set up the search functionality
+          const headerSearchBar = document.getElementById("headerSearchBar");
+          if (headerSearchBar) {
+            headerSearchBar.addEventListener("input", function () {
+              window.globalSearchGames(this.value);
+            });
+          }
+        });
+
+        // Setup event listener for when header is loaded
+        document.addEventListener("headerLoaded", function () {
+          console.log("Header loaded event received");
+          const headerSearchBar = document.getElementById("headerSearchBar");
+          if (headerSearchBar) {
+            headerSearchBar.addEventListener("input", function () {
+              window.globalSearchGames(this.value);
+
+              // Sync with main search bar
+              const searchGamesInput = document.getElementById("searchGames");
+              if (searchGamesInput && searchGamesInput.value !== this.value) {
+                searchGamesInput.value = this.value;
+              }
+            });
+          }
+        });
+
+        // Set up a MutationObserver to watch for the header being inserted into the DOM
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+              for (let i = 0; i < mutation.addedNodes.length; i++) {
+                const node = mutation.addedNodes[i];
+                // Check if our header element was added
+                if (
+                  node.id === "header" ||
+                  (node.querySelector && node.querySelector("#headerSearchBar"))
+                ) {
+                  console.log("Header detected in DOM");
+
+                  // Wait a short time for any scripts to initialize
+                  setTimeout(() => {
+                    const headerSearchBar =
+                      document.getElementById("headerSearchBar");
+                    if (headerSearchBar) {
+                      console.log("Setting up header search bar");
+                      headerSearchBar.addEventListener("input", function () {
+                        window.globalSearchGames(this.value);
+
+                        // Sync with main search bar
+                        const searchGamesInput =
+                          document.getElementById("searchGames");
+                        if (
+                          searchGamesInput &&
+                          searchGamesInput.value !== this.value
+                        ) {
+                          searchGamesInput.value = this.value;
+                        }
+                      });
+                    }
+                  }, 100);
+
+                  // We found what we're looking for, so stop observing
+                  observer.disconnect();
+                }
+              }
+            }
+          });
+        });
+
+        // Start observing the document body for changes
+        observer.observe(document.body, { childList: true, subtree: true });
+      } catch (error) {
+        console.error("Error loading games:", error);
+        gamesList.innerHTML = `<div style="color: white;">Error loading games: ${error.message}</div>`;
+      }
+
+      // Load header and footer
+      loadHTML("/assets/html/header.html", "header");
+      loadHTML("/assets/html/footer.html", "footer");
+    </script>
+    <script>
+      console.log("Script loaded!");
+    </script>
+  </body>
+</html>
