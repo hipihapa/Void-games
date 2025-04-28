@@ -1,3 +1,3 @@
 # Void-games
 
-# npm i
+npm i
